@@ -1,6 +1,6 @@
 # billeasy.store
-https://billeasy.store/
-https://billeasy.store/admin
+[사이트 바로가기](https://billeasy.store/) | [관리자 페이지](https://billeasy.store/admin)
+
 
 가전·가구 렌탈, 판매, 양도/양수 기능을 통합한 웹 플랫폼 프로젝트입니다.  
 디지털컨버전스 ICT융합 풀스택(Java/Spring) 개발자 양성과정 팀 프로젝트로 개발되었습니다.
