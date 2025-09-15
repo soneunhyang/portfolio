@@ -1,4 +1,6 @@
 # billeasy.store
+https://billeasy.store/
+https://billeasy.store/admin
 
 가전·가구 렌탈, 판매, 양도/양수 기능을 통합한 웹 플랫폼 프로젝트입니다.  
 디지털컨버전스 ICT융합 풀스택(Java/Spring) 개발자 양성과정 팀 프로젝트로 개발되었습니다.
@@ -47,4 +49,19 @@
 - 이메일 인증 기반 회원가입  
 - 세션 기반 역할별 분기 처리  
 - Ajax 비동기 처리  
-- 정규화된 DB 구조 기반 복잡한 로직 처리  
+- 정규화된 DB 구조 기반 복잡한 로직 처리
+
+---
+
+프로젝트 구조 (간략화)
+
+├─ controller   # 컨트롤러
+├─ domain       # DTO/도메인
+├─ service      # 서비스 로직
+│   └─ impl     # 서비스 구현
+└─ mapper       # DB 매퍼
+
+---
+
+GitHub 링크
+[billeasy.store GitHub](https://github.com/soneunhyang/portfolio)
