@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{admin/layout/default}">
+	<!-- head 삽입공간 -->
+	<head>
+	</head>
+	
+	<th:block layout:fragment="jsFile">
+	</th:block>
+	
+	<!-- 페이지 삽입공간 -->
+    <th:block layout:fragment="content">
+		<div class="content-header">
+			<div>
+				<h2 class="content-title card-title" th:text="${title}"></h2>
+			</div>
+		</div>
+        <div class="card mb-4">
+            <header class="card-header">
+            	<form th:action="@{/admin/member/searchMember}" method="get">
+            		<div class="row gx-3">
+	                   	<!-- 검색 기준 -->
+					    <div class="col-lg-2 col-md-3 col-6">
+					    	<select class="form-select" name="searchKey">
+					        	<option value="memberId" th:selected="${searchKey == 'memberId'}">회원아이디</option>
+					        	<option value="memberName" th:selected="${searchKey == 'memberName'}">회원이름</option>
+					    	</select>
+					    </div>
+	                    <!-- 키워드 입력 -->
+					    <div class="col-lg-2 col-md-3 col-6">
+					      <input type="text" name="searchValue" th:value ="${searchValue}" placeholder="검색어 입력" class="form-control" />
+					    </div>
+					    <!-- 회원 유형 -->
+					    <div class="col-lg-2 col-md-3 col-6">
+					    	<select class="form-select" name="memberType">
+						    	<option value="" th:selected="${memberType == null or memberType == ''}">전체유형</option>
+								<option value="개인고객" th:selected="${memberType == '개인고객'}">개인고객</option>
+								<option value="기업고객" th:selected="${memberType == '기업고객'}">기업고객</option>
+								<option value="입점업체 대표" th:selected="${memberType == '입점업체 대표'}">입점업체 대표</option>
+								<option value="입점업체 직원" th:selected="${memberType == '입점업체 직원'}">입점업체 직원</option>
+						    	<option value="플랫폼직원" th:selected="${memberType == '플랫폼직원'}">플랫폼직원</option>
+					    	</select>
+					    </div>
+					    <!-- 회원 상태 -->
+					    <div class="col-lg-2 col-md-3 col-6">
+				    		<select class="form-select" name="status">
+								 <option value="" th:selected="${status == null or status == ''}">전체상태</option>
+								 <option value="ACTIVE" th:selected="${status == 'ACTIVE'}">정상회원</option>
+								 <option value="DORMANT" th:selected="${status == 'DORMANT'}">휴면회원</option>
+								 <option value="WITHDRAWN" th:selected="${status == 'WITHDRAWN'}">탈퇴회원</option>
+							</select>
+					    </div>
+					    <div class="col-lg-2 col-md-3 col-6">
+					      <button type="submit" class="btn btn-primary">검색</button>
+					    </div>
+	                   	<div class="col-lg-2 col-md-3 col-12">
+		                       <select class="form-select" name="rowPerPage" id="rowPerPage">
+		                           <option value="10" th:selected="${rowPerPage eq 10}">Show 10</option>
+		                           <option value="20" th:selected="${rowPerPage eq 20}">Show 20</option>
+		                           <option value="30" th:selected="${rowPerPage eq 30}">Show 30</option>
+		                       </select>
+	                   	</div>
+	               </div>          	
+            	</form>
+           	</header>    
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table align-middle table-nowrap mb-0 w-100">
+                        <thead class="table-light text-center">
+                            <tr>
+                                <th class="align-middle" scope="col">회원아이디</th>
+                                <th class="align-middle" scope="col">회원유형</th>
+                                <th class="align-middle" scope="col">회원이름</th>
+                                <th class="align-middle" scope="col">휴면상태</th>
+                                <th class="align-middle" scope="col">탈퇴상태</th>
+                                <th class="align-middle" scope="col">등록일시</th>
+                                <th class="align-middle" scope="col">수정일시</th>
+                                <th class="align-middle" scope="col">상태전환일시</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            <tr th:if="${!#lists.isEmpty(memberList)}"
+                          	  	th:each="l : ${memberList}">
+                                <td>
+                                	<button type="button" 
+                                			th:data-member-id="${l.memberId}"
+											th:data-member-type="${l.memberType}"
+                                			th:onclick="openMemberDetailModal(this)"
+                                			class="btn btn-link p-0 text-primary text-decoration-underline fw-bold" th:text="${l.memberId}">
+									    회원아이디
+									</button>
+								</td>
+                                <td th:text="${l.memberType}">기업고객</td>
+                                <td th:text="${l.memberName}">김슬기</td>
+                                <td class="col-status">
+								    <span class="badge rounded-pill"
+								          th:classappend="${l.dormantStatus == 'N'} ? 'alert-success' : 'alert-danger'"
+								          th:text="${l.dormantStatus}">N
+								    </span>
+								</td>
+                                <td class="col-status"> 
+                                	<span class="badge rounded-pill"
+                                		  th:classappend="${l.withdrawStatus == 'N'} ? 'alert-success' : 'alert-danger'"
+                                		  th:text="${l.withdrawStatus}">N</span>
+                                </td>
+                                <td th:text="${l.memberRegDate}">2023-04-14 00:00:00</td>
+                                <td th:text="${l.memberRevDate}">2023-04-14 00:00:00</td>
+                                <td th:text="${l.stateTransitionDate}"></td>
+                            </tr>
+                            <tr th:unless="${!#lists.isEmpty(memberList)}">
+                                	<td colspan="7">등록없음</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- table-responsive.// -->
+                </div>
+            </div>
+            <!-- card-body end// -->
+        </div>
+        <!-- card end// -->
+        <div class="pagination-area mt-30 mb-50">
+	          <nav aria-label="Page navigation example">
+	              	<ul class="pagination justify-content-center">
+	                	 <li class="page-item" th:classappend="${currentPage eq startPageNum} ? 'disabled'">
+	                        <a class="page-link" th:href="@{/admin/member/memberList}"><i class="material-icons md-first_page"></i></a>
+	                     </li>
+	                     <li class="page-item" th:classappend="${currentPage < 2} ? 'disabled'">
+	                        <a class="page-link" th:href="${searchKey != null} 
+	                        							  ?  @{/admin/member/searchMember(currentPage=${currentPage - 1}, searchKey=${searchKey},
+																						   		searchValue=${searchValue}, memberType=${memberType}, status=${status}, rowPerPage=${rowPerPage})}
+	                        							  :  @{/admin/member/memberList(currentPage=${currentPage - 1}, rowPerPage=${rowPerPage})}">
+	                        	<i class="material-icons md-chevron_left"></i>
+	                        </a>
+	                     </li>
+	                     <th:block th:each="num : ${#numbers.sequence(startPageNum, endPageNum)}">
+		                    <li class="page-item" th:classappend="${num eq currentPage} ? 'active disabled'">
+		                    	<a class="page-link" th:href="${searchKey != null} 
+	                        							  	  ?  @{/admin/member/searchMember(currentPage=${num}, searchKey=${searchKey},
+																						   			searchValue=${searchValue}, memberType=${memberType}, status=${status}, rowPerPage=${rowPerPage})}
+	                        							      :  @{/admin/member/memberList(currentPage=${num}, rowPerPage=${rowPerPage})}"
+		                    		th:text="${num < 10 ? '0' + num : num}">01</a>
+		                   	</li>                    
+	                     </th:block>                 
+	                     <li class="page-item" th:classappend="${currentPage eq lastPage} ? 'disabled'">
+	                        <a class="page-link" th:href="${searchKey != null} 
+	                        							  ?  @{/admin/member/searchMember(currentPage=${currentPage + 1}, searchKey=${searchKey},
+																						   		searchValue=${searchValue}, memberType=${memberType}, status=${status})}
+	                        							  :  @{/admin/member/memberList(currentPage=${currentPage + 1})}">
+	                        	<i class="material-icons md-chevron_right"></i>
+	                        </a>
+	                     </li>
+	                     <li class="page-item">
+	                        <a class="page-link" th:href="${searchKey != null} 
+	                        							  ?  @{/admin/member/searchMember(currentPage=${lastPage}, searchKey=${searchKey},
+																						  searchValue=${searchValue}, memberType=${memberType}, status=${status})}
+	                        							  :  @{/admin/member/memberList(currentPage=${lastPage})}">
+	                        	<i class="material-icons md-last_page"></i>
+	                        </a>
+	                    </li>
+	                </ul>
+	            </nav>
+	        </div>
+        <!-- content-main end// -->
+        <div id="memberDetailModal" class="modal fade" tabindex="-1">
+		  <div class="modal-dialog modal-lg">
+		    <div class="modal-content p-3">
+		      <div class="modal-header">
+		        <h5 class="modal-title">회원 상세정보</h5>
+		        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+		      </div>
+		      <div class="modal-body">
+		        <table class="table table-bordered">
+		          <tbody>
+		            <!-- 개인고객 -->
+		            <tr id="custBrdtRow" class="detail-row"><th>생년월일</th><td></td></tr>
+					<tr id="custAddrRow" class="detail-row"><th>주소</th><td></td></tr>
+					<tr id="custDaddrRow" class="detail-row"><th>상세주소</th><td></td></tr>
+					<tr id="custEmailRow" class="detail-row"><th>이메일</th><td></td></tr>
+					<tr id="custPhoneRow" class="detail-row"><th>전화번호</th><td></td></tr>
+		
+		            <!-- 기업고객 -->
+		            <tr id="corpNameRow" class="detail-row"><th>기업명</th><td></td></tr>
+					<tr id="corpBrnoRow" class="detail-row"><th>사업자번호</th><td></td></tr>
+					
+		            <!-- 플랫폼직원 -->
+		            <tr id="managerNameRow" class="detail-row"><th>이름</th><td></td></tr>
+		            <tr id="managerGender" class="detail-row"><th>성별</th><td></td></tr>
+					<tr id="managerBrdt" class="detail-row"><th>생년월일</th><td></td></tr>
+					<tr id="managerPhone" class="detail-row"><th>전화번호</th><td></td></tr>
+		
+		            <!-- 입점업체 -->
+		            <tr id="entPositionRow" class="detail-row"><th>직급</th><td></td></tr>
+					<tr id="entEmpNameRow" class="detail-row"><th>입점업체 대표명</th><td></td></tr>
+					<tr id="entEmpEmailRow" class="detail-row"><th>입점업체 이메일</th><td></td></tr>
+					<tr id="entEmpPhoneRow" class="detail-row"><th>입점업체 전화</th><td></td></tr>
+					<tr id="entBrnoRow" class="detail-row"><th>사업자번호</th><td></td></tr>
+					<tr id="entNameRow" class="detail-row"><th>입점업체명</th><td></td></tr>
+					<tr id="entCeoAddrRow" class="detail-row"><th>주소</th><td></td></tr>
+					<tr id="entCeoDaddrRow" class="detail-row"><th>상세주소</th><td></td></tr>
+		            <tr id="entBankRow" class="detail-row"><th>은행명</th><td></td></tr>
+					<tr id="entBankNumRow" class="detail-row"><th>계좌번호</th><td></td></tr>
+		          </tbody>
+		        </table>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		</th:block>
+    	<th:block layout:fragment="jsScript">
+	    	<script>
+			    function openMemberDetailModal(data) {
+	
+			    	const memberId = data.getAttribute('data-member-id');
+			        const memberType = data.getAttribute('data-member-type');
+	
+			    $.ajax({
+			        url: "/admin/member/memberDetail",
+			        data: { memberId: memberId, memberType: memberType },
+			        success: function(data) {
+			            $('.detail-row').hide();
+			
+			            // 공통 + 개인/기업 
+			            if (memberType === '개인고객' || memberType === '기업고객') {
+			                $('#custBrdtRow').show().find('td').text(data.custBrdt || '-');
+			                $('#custAddrRow').show().find('td').text(data.custAddr || '-');
+			                $('#custDaddrRow').show().find('td').text(data.custDaddr || '-');
+			                $('#custEmailRow').show().find('td').text(data.custEmail || '-');
+			                $('#custPhoneRow').show().find('td').text(data.custPhone || '-');
+			            }
+			
+			            if (memberType === '기업고객') {
+			                $('#corpNameRow').show().find('td').text(data.corpName || '-');
+			                $('#corpBrnoRow').show().find('td').text(data.corpBrno || '-');
+			            }
+			            
+			            if (memberType === '플랫폼직원') {
+			                $('#managerNameRow').show().find('td').text(data.managerName || '-');
+			                $('#managerGender').show().find('td').text(data.managerGender || '-');
+			                $('#managerBrdt').show().find('td').text(data.managerBrdt || '-');
+			                $('#managerPhone').show().find('td').text(data.managerPhone || '-');
+			            }
+			
+			            // 입점업체 대표/직원
+			            if (memberType === '입점업체 대표' || memberType === '입점업체 직원') {
+			                $('#entPositionRow').show().find('td').text(data.entPosition || '-');
+			                $('#entEmpNameRow').show().find('td').text(data.entEmpName || '-');
+			                $('#entEmpEmailRow').show().find('td').text(data.entEmpEmail || '-');
+			                $('#entEmpPhoneRow').show().find('td').text(data.entEmpPhone || '-');
+			                $('#entBrnoRow').show().find('td').text(data.entBrno || '-');
+			                $('#entNameRow').show().find('td').text(data.entName || '-');
+			                $('#entCeoAddrRow').show().find('td').text(data.entCeoAddr || '-');
+			                $('#entCeoDaddrRow').show().find('td').text(data.entCeoDaddr || '-');
+			            }
+			
+			            // 입점업체 대표
+			            if (memberType === '입점업체 대표') {
+			                $('#entBankRow').show().find('td').text(data.entBank || '-');
+			                $('#entBankNumRow').show().find('td').text(data.entBankNum || '-');
+			            }
+			           
+			            $('#memberDetailModal').modal('show');
+			        	},
+				        error: function() {
+				            alert('회원 상세정보 조회 실패');
+				        }
+				    });
+				}
+	    	</script>
+	    	<script th:inline="javascript">
+				const rowPerPage = /*[[${rowPerPage}]]*/'';
+				/* if(rowPerPage) {
+					$('.page-link').each((idx, item)=>{
+						let href = $(item).attr('href');
+						let separator = '?';
+						if(href.includes('?')) separator = '&';
+						href += `${separator}rowPerPage=${rowPerPage}`;
+						$(item).attr('href', href);
+					});
+				} */
+				$('#rowPerPage').change(function(){
+					const href = location.href;
+					const url = new URL(href);
+					const urlParams = url.searchParams;
+					// 페이지 초기화
+					urlParams.set('currentPage', 1);
+					urlParams.set('rowPerPage', $(this).val());
+					location.href = `${url.pathname}?${urlParams.toString()}`;
+				});
+			</script>
+		</th:block>
+   </body>
+    
+</html>
