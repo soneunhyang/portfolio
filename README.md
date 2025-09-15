@@ -64,4 +64,4 @@
 ---
 
 GitHub 링크
-[billeasy.store GitHub](https://github.com/soneunhyang/portfolio)
+[billeasy.store GitHub](https://github.com/soneunhyang/portfolio/tree/main/portfolio-membership)
