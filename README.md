@@ -53,15 +53,5 @@
 
 ---
 
-프로젝트 구조 (간략화)
-
-├─ controller   # 컨트롤러
-├─ domain       # DTO/도메인
-├─ service      # 서비스 로직
-│   └─ impl     # 서비스 구현
-└─ mapper       # DB 매퍼
-
----
-
 GitHub 링크
 [billeasy.store GitHub](https://github.com/soneunhyang/portfolio/tree/main/portfolio-membership)
