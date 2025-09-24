@@ -10,18 +10,21 @@
 ![Project Badge](https://img.shields.io/badge/Status-Completed-brightgreen) ![Java](https://img.shields.io/badge/Java-17-blue) ![Spring Boot](https://img.shields.io/badge/SpringBoot-3.3.0-green)
 
 ---
+
 ### 프로젝트 주제
 
 
 - 통합 플랫폼을 통해 가전/가구 렌탈, 판매, 양도/양수 기능 제공
 
 ---
+
 ### 프로젝트 명
 
 
 - 양도양수매칭 렌탈 플랫폼
 
 ---
+
 ### 프로젝트 목적 
 
 
@@ -38,6 +41,7 @@
    - 친환경적 소비문화를 촉진하고 불필요한 구매/폐기 최소화
 
 ---
+
 ### 프로젝트 기대효과 
 
 
@@ -90,6 +94,7 @@
   - 정규화된 DB 구조 기반 복잡한 로직 분기 처리
 
 ---
+
 ### 개발과정
 
 - 시스템 구조도 및 ERD 설계
@@ -99,6 +104,7 @@
 - 테스트 및 시연 발표
 
 ---
+
 ### 개발환경 
 
 - Language : Java 17.0.2, JavaScript(JQuery : jquery-3.4.1, jquery-2.2.3), HTML5, CSS, Thymeleaf
