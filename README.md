@@ -131,5 +131,5 @@
 ---
 
 ### GitHub 링크
-[billeasy.store GitHub](https://github.com/soneunhyang/portfolio/tree/main/portfolio-membership)
+담당 기능 코드 : [billeasy.store GitHub](https://github.com/soneunhyang/portfolio/tree/main/portfolio-membership)
 
